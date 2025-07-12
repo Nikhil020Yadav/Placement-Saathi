@@ -1,0 +1,20 @@
+# Frontend (React + Vite)
+client/node_modules/
+client/dist/
+client/.env
+client/.env.*
+client/.vite/
+
+# Backend (Node.js)
+server/node_modules/
+server/dist/
+server/.env
+server/.env.*
+
+# Shared
+*.log
+logs/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,149 @@
+# POST http://localhost:8080/createBlog
+# Content-Type: application/json
+
+# {
+#     "blog-name": "This is the first blog"
+# }
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTJmNGUxY2UyMzU2NjBlODI5NGI5NiIsImlhdCI6MTc1MDI2NzEwNX0.xp8O6ssJGyOB_mhzusD5q6bL-RiEEL8Ea4Yq_NQHUdk
+# POST http://localhost:8080/signup
+# Content-Type: application/json
+
+# {
+#      "fullname":"Arkya Ghosh",
+#      "email":"arkyaghosh123@gmail.com",
+#      "password":"arkyaAAB123"
+# }
+
+# POST http://localhost:8080/createBlog
+# Content-Type: application/json
+# # Authorization: Bearer jgejgglgge
+
+# {
+#     "blog-name": "This is the first blog"
+# }
+# POST http://localhost:8080/createBlog
+# Content-Type: application/json
+# Authorization: Bearer faketokenhere
+
+# {
+#   "blog_name": "This is the first blog"
+# }
+
+
+# POST http://localhost:8080/createBlog
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTJmNGUxY2UyMzU2NjBlODI5NGI5NiIsImlhdCI6MTc1MDI2NzEwNX0.xp8O6ssJGyOB_mhzusD5q6bL-RiEEL8Ea4Yq_NQHUdk
+
+# {
+#   "title": "Adobe SDE-1 Placement Experience",
+#   "banner": "https://example.com/images/banner.jpg",
+#   "company": "Adobe",
+#   "jobRole": "SDE-1",
+#   "department": "IT",
+#   "ctc": "21 LPA",
+#   "year": "2025",
+#   "experience": "It had 4 rounds including OA and interviews...",
+#   "preparation": "I solved Striver SDE sheet...",
+#   "difficulty": "Medium",
+#   "offerType": "FTE",
+#   "tags": ["FTE", "On-Campus"]
+  
+# }
+# POST http://localhost:8080/createBlog
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTQ1ZTlhZmE0ZjhmMTgzOGRkZmQ0MiIsImlhdCI6MTc1MDM1OTcwNn0.ZYye9jL8eSc2zy3QZpmJNRT4kXu4Kr3lTOIfWH3WiRE
+
+# {
+#    "title": "Microsoft SDE-1 Placement Experience",
+#    "banner": "https://example.com/images/banner.jpg",
+#    "company": "Microsoft",
+#    "jobRole": "SDE-1",
+#    "department": "IT",
+#    "ctc": "55 LPA",
+#    "year": "2024",
+#    "experience": "It was the summer of 2024 I worked hard",
+#    "preparation": "I solved Striver SDE sheet...",
+#    "difficulty": "Medium",
+#    "offerType": "Internship",
+#    "tags": ["Internship","On-Campus","CP","DSA"]
+  
+# }
+
+# GET http://localhost:8080/latest-blogs
+
+# GET http://localhost:8080/trending-blogs
+
+# POST http://localhost:8080/search-blogs
+# Content-Type: application/json
+
+# {
+#     "tag":"fte"
+# }
+
+# POST http://localhost:8080/search-users
+# Content-Type: application/json
+
+# {
+#     "query":"gau"
+# }
+# POST http://localhost:8080/search-blogs
+# Content-Type: application/json
+
+# {
+#   "query": "Amazon"
+# }
+
+
+
+# POST http://localhost:8080/get-profile
+# Content-Type: application/json
+
+# {
+#      "username":"arkyaghosh123"
+# }
+
+# POST http://localhost:8080/get-blog
+# Content-Type: application/json
+
+# {
+#    "blog_id":"Microsoft-SDE-1-Placement-Experiencev9YOJ459iGY4mAhCcqE2i"   
+# }
+//"blog_id":"6853e5de14b0fc8e407980cd",
+   //"draft": true,
+   //"mode":"edit"
+
+# POST http://localhost:8080/get-profile
+# Content-Type: application/json
+
+# {
+#      "username":"arkyaghosh123"
+# }
+
+//I need to work on get-blog ->"Edit Blog Functionality"
+//I need to work on delete-comment 
+
+# POST http://localhost:8080/signin
+# Content-Type: application/json
+
+# {
+#    "email":"gauravgupta@gmail.com",
+#    "password":"ggGG12345"
+# }
+
+# POST http://localhost:8080/change-password
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGU2NzEzOWYzNDNhODMxMmU3NTJhYiIsImlhdCI6MTc1MTA5NzE3NH0.bksY5an5mhem9vuHzvJZKEjuUkFVPgbgHqdhw0xep-A
+
+# {
+#    "currentPassword":"ggGG12345",
+#    "newPassword":"GGgg12345"
+# }
+
+POST http://localhost:8080/user-written-blogs-count
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NGU2NzEzOWYzNDNhODMxMmU3NTJhYiIsImlhdCI6MTc1MTA5NzE3NH0.bksY5an5mhem9vuHzvJZKEjuUkFVPgbgHqdhw0xep-A
+
+{
+   "draft":false
+}
+
