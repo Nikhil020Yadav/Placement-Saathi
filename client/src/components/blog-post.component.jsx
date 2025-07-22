@@ -1,10 +1,22 @@
 import { getDay } from "../common/date";
 import { Link } from 'react-router-dom';
+import { fetchCompanyLogo } from "../common/fetchCompanyLogo.js";
+import { useState, useEffect } from "react";
 const BlogPostCard = ({ content, author }) => {
+    const [companyLogo, setCompanyLogo] = useState(null);
+    console.log("BlogPostCard content:", content);
 
-    let { publishedAt, title, banner, ctc, company, offerType, activity: { total_likes }, blog_id: id } = content;
+    let { publishedAt, title, banner, ctc, offerType, activity: { total_likes }, blog_id: id } = content;
     let { fullname, profile_img, username } = author
+    const company = content.company || id?.split("-")[0];
     console.log(company);
+    useEffect(() => {
+        const fetchLogo = async () => {
+            const { logoUrl } = await fetchCompanyLogo(company);
+            setCompanyLogo(logoUrl);
+        };
+        if (company) fetchLogo();
+    }, [company]);
 
     return (
         <Link to={`/blog/${id}`} className="flex gap-8 items-center border-b border-grey pb-5 mb-4">
@@ -28,8 +40,21 @@ const BlogPostCard = ({ content, author }) => {
                 </div>
 
             </div>
-            <div className="h-28 aspect-square bg-grey">
-                <img src={banner} className="w-full h-full aspect-square object-cover" />
+            <div className="h-28 w-28 flex items-center justify-center bg-white shadow-sm rounded-lg overflow-hidden border">
+                {companyLogo ? (
+                    <img
+                        src={companyLogo}
+                        onError={(e) => { e.target.src = "/default-banner.png"; }}
+                        className="max-h-20 max-w-[80%] object-contain"
+                        alt={`${company} logo`}
+                    />
+                ) : (
+                    <img
+                        src="/default-banner.png"
+                        className="h-16 w-auto object-contain"
+                        alt="default logo"
+                    />
+                )}
             </div>
         </Link>
     )

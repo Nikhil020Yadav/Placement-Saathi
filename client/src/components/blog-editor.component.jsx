@@ -132,7 +132,7 @@ const BlogEditor = () => {
             <AnimationWrapper>
                 <section>
                     <div className="mx-auto max-w-[900px] w-full">
-                        <div className="relative aspect-video bg-white border-4 border-grey hover:opacity-80">
+                        {/* <div className="relative aspect-video bg-white border-4 border-grey hover:opacity-80">
                             <label htmlFor="uploadBanner">
                                 <img
                                     src={defaultBanner}
@@ -149,7 +149,7 @@ const BlogEditor = () => {
                                 />
 
                             </label>
-                        </div>
+                        </div> */}
 
 
                         <textarea
@@ -229,7 +229,7 @@ const BlogEditor = () => {
                             onChange={(e) => setBlog({ ...blog, offerType: e.target.value })}
 
                         >
-                            <option value="">Offer Type</option>
+                            <option value="" className="">Offer Type</option>
                             <option value="Easy">PPO</option>
                             <option value="Medium">FTE</option>
                             <option value="Hard">Internship</option>

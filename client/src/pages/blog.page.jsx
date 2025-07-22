@@ -9,6 +9,8 @@ import BlogPostCard from "../components/blog-post.component.jsx";
 import BlogContent from "../components/blog-content.component.jsx";
 import CommentsContainer, { fetchComments } from "../components/comments.component.jsx";
 import axios from 'axios';
+import { fetchCompanyLogo } from "../common/fetchCompanyLogo.js";
+import { getCompanyDomain } from '../common/companyLogo.js';
 console.log("Axios loaded:", typeof axios);
 
 
@@ -38,7 +40,7 @@ export const blogStructure = {
 export const BlogContext = createContext({});
 const BlogPage = () => {
     let { blog_id } = useParams()
-
+    const [companyLogo, setCompanyLogo] = useState(null);
     let [blog, setBlog] = useState(blogStructure)
     const [loading, setLoading] = useState(false)
     let [similarBlogs, setSimilarBlogs] = useState(null)
@@ -48,7 +50,13 @@ const BlogPage = () => {
     const [totalParentCommentsLoaded, setTotalParentCommentsLoaded] = useState(0);
 
 
+
     let { title, company, jobRole, department, ctc, year, banner, experience, preparation, difficulty, offerType, author: { personal_info: { fullname, username: author_username, profile_img } } } = blog;
+
+    const companyDomain = getCompanyDomain(company);
+    const companyLogoUrl = companyDomain
+        ? `https://logo.clearbit.com/${companyDomain}`
+        : banner;
     const fetchBlog = () => {
         console.log("Fetching blog with blog_id:", blog_id)
 
@@ -64,6 +72,9 @@ const BlogPage = () => {
                 console.log("Before :", blog);
 
                 setBlog(blog);
+                const { logoUrl } = await fetchCompanyLogo(blog.company);
+                setCompanyLogo(logoUrl);
+
                 console.log("After : ", blog);
                 axios.post(import.meta.env.VITE_SERVER_URL + "/search-blogs", { tag: blog.tags, limit: 6, eliminate_blog: blog_id })
                     .then(({ data }) => {
@@ -107,9 +118,30 @@ const BlogPage = () => {
                     <BlogContext.Provider value={{ blog, setBlog, isLikedByUser, setLikedByUser, commentsWrapper, setCommentsWrapper, totalParentCommentsLoaded, setTotalParentCommentsLoaded }}>
                         <CommentsContainer />
                         <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
-                            <img src={banner} className="aspect-video" />
+
+                            {/* {companyLogo && (
+                                <img
+                                    src={companyLogo}
+                                    onError={(e) => { e.target.src = "/default-banner.png"; }}
+                                    className="h-24 mx-auto object-contain"
+                                    alt={`${company} logo`}
+                                />
+                            )} */}
+                            <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start mb-6">
+                                {companyLogo && (
+                                    <img
+                                        src={companyLogo}
+                                        onError={(e) => { e.target.src = "/default-banner.png"; }}
+                                        className="h-12 sm:h-16 w-auto object-contain"
+                                        alt={`${company} logo`}
+                                    />
+                                )}
+                                <h2 className="text-2xl sm:text-3xl font-semibold text-center sm:text-left">{title}</h2>
+                            </div>
+
+
                             <div className='mt-12'>
-                                <h2>{title}</h2>
+
                                 <div className="flex max-sm:flex-col justify-between my-8">
 
                                     <div className="flex gap-5 items-start">

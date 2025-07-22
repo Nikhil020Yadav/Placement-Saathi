@@ -6,7 +6,24 @@ import { BlogContext } from "../pages/blog.page";
 import axios from "axios";
 
 const CommentCard = ({ index, leftVal, commentData }) => {
-    let { commented_by: { personal_info: { username: commented_by_username, fullname, profile_img } }, commentedAt, comment, _id, children } = commentData;
+    const {
+        commented_by,
+        commentedAt,
+        comment,
+        _id,
+        children = [],
+        childrenLevel = 0,
+        isReplyLoaded = false
+    } = commentData || {};
+
+    const {
+        personal_info: {
+            username: commented_by_username = "",
+            fullname = "Anonymous",
+            profile_img = "/default-profile.png"
+        } = {}
+    } = commented_by || {};
+
     let { blog, blog: { comments, activity, activity: { total_parent_comments }, comments: { results: commentsArr }, author: { personal_info: blog_author } }, setBlog, setTotalParentCommentsLoaded } = useContext(BlogContext);
 
     let { userAuth: { access_token, username } } = useContext(UserContext);
