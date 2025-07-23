@@ -117,11 +117,6 @@ const PublishForm = () => {
                     <i className="fi fi-br-cross"></i>
                 </button>
                 <div className="max-w-[550px] center">
-                    {/* <p text-dark-grey mb-1> Preview </p> */}
-
-                    {/* <div className="w-full aspect-video rounded-1g overflow-hidden bg-grey mt-4">
-                        <img src="" />
-                    </div> */}
                     <div className="h-28 w-28 flex items-center justify-center bg-white shadow-sm rounded-lg overflow-hidden border">
                         {companyLogo ? (
                             <img

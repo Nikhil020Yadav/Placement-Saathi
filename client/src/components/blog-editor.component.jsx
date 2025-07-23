@@ -10,22 +10,12 @@ import { UserContext } from "../App";
 const BlogEditor = () => {
 
     let { blog, blog: { title, company, jobRole, department, ctc, year, experience, preparation, difficulty, offerType, tags }, setBlog, setEditorState } = useContext(EditorContext);
-    //console.log(title);
 
-    // const editorRef = useRef(null); // DOM ref for holder
-    // const editorInstance = useRef(null); // EditorJS instance
-    // const [editorReady, setEditorReady] = useState(false);
 
     let { userAuth: { access_token } } = useContext(UserContext)
     let { blog_id } = useParams()
     let navigate = useNavigate()
-    // const handleBannerUpload = (e) => {
-    //     console.log(e);
-    //     let img = e.target.files[0];
 
-    //     console.log(img);
-
-    // }
     const handleTitleKeyDown = (e) => {
         console.log(e);
         if (e.keyCode == 13) {
@@ -52,13 +42,13 @@ const BlogEditor = () => {
             return;
         }
 
-        // Log all collected blog data
+
         console.log("Blog Data to Publish:", blog);
 
-        // Transition to "publish" or submit to backend later
+
         setEditorState("publish");
 
-        // toast success (optional)
+
         toast.success("Experience ready to publish!");
     };
     const handleSaveDraft = (e) => {
@@ -101,9 +91,6 @@ const BlogEditor = () => {
 
 
     }
-    // useEffect(() => {
-    //     fetchBlogData();
-    // }, []);
 
     if (!blog) {
         return <div>Loading blog...</div>;
@@ -132,25 +119,6 @@ const BlogEditor = () => {
             <AnimationWrapper>
                 <section>
                     <div className="mx-auto max-w-[900px] w-full">
-                        {/* <div className="relative aspect-video bg-white border-4 border-grey hover:opacity-80">
-                            <label htmlFor="uploadBanner">
-                                <img
-                                    src={defaultBanner}
-                                    className="z-20"
-
-                                />
-
-                                <input
-                                    id="uploadBanner"
-                                    type="file"
-                                    accept=".png .jpg .jpeg"
-                                    hidden
-                                    onChange={handleBannerUpload}
-                                />
-
-                            </label>
-                        </div> */}
-
 
                         <textarea
                             defaultValue={blog.title}
@@ -210,8 +178,8 @@ const BlogEditor = () => {
                         <textarea
                             placeholder="Preparation Tips / Resources"
                             className="w-full h-[200px] resize-none mt-5 p-3 border rounded-md"
-                            value={blog.tips || ''}
-                            onChange={(e) => setBlog({ ...blog, tips: e.target.value })}
+                            value={blog.preparation || ''}
+                            onChange={(e) => setBlog({ ...blog, preparation: e.target.value })}
                         />
                         <select className="w-full p-3 border rounded-md mt-5"
                             value={blog.difficulty || ''}
