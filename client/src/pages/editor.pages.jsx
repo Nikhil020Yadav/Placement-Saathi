@@ -56,16 +56,21 @@ const Editor = () => {
         console.log("Fetching 0 ->>", blog_id);
 
         axios.post(import.meta.env.VITE_SERVER_URL + '/get-blog', {
-            blog_id, draft: true, mode: 'edit'
+            blog_id, mode: 'edit'
         })
             .then(({ data: { blog } }) => {
                 setBlog(blog);
                 setLoading(false);
             })
             .catch((err) => {
+                console.log(err.message);
                 setBlog(null);
                 setLoading(false);
-                console.log(err.message);
+                if (err.response) {
+                    toast.error(err.response.data.error || "Something went wrong");
+                } else {
+                    toast.error("Network error or server is unreachable");
+                }
 
             })
     }, [])

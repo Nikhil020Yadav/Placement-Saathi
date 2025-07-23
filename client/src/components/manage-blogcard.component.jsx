@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { getDay } from "../common/date";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../App";
 import axios from "axios";
+import { fetchCompanyLogo } from "../common/fetchCompanyLogo";
 const BlogStats = ({ stats }) => {
     return (
         <div className="flex gap-2 max-lg:mb-6 max-lg:pb-6 border-grey max-lg:border-b ">
@@ -22,13 +23,36 @@ const BlogStats = ({ stats }) => {
 }
 export const ManagePublishedBlogCard = ({ blog }) => {
 
-    let { banner, title, blog_id, publishedAt, activity } = blog
+    let { banner, title, blog_id, publishedAt, activity, company } = blog
     let [showStat, setShowStat] = useState(false);
+    const [companyLogo, setCompanyLogo] = useState(null);
     let { userAuth: { access_token } } = useContext(UserContext)
+    console.log(company);
+    useEffect(() => {
+        const fetchLogo = async () => {
+            const { logoUrl } = await fetchCompanyLogo(company);
+            setCompanyLogo(logoUrl);
+        };
+        if (company) fetchLogo();
+    }, [company]);
     return (
         <>
             <div className="flex gap-10 border-b mb-6 max-md:px-4 border-grey pb-6 items-center">
-                <img src={banner} className="max-md:hidden lg:hidden xl:block w-20 h-20 flex-none bg-grey object-cover" />
+                {/* <img src={banner} className="max-md:hidden lg:hidden xl:block w-20 h-20 flex-none bg-grey object-cover" /> */}
+                {companyLogo ? (
+                    <img
+                        src={companyLogo}
+                        onError={(e) => { e.target.src = "/default-banner.png"; }}
+                        className="max-h-20 max-w-[80%] object-contain"
+                        alt={`${company} logo`}
+                    />
+                ) : (
+                    <img
+                        src="/default-banner.png"
+                        className="h-16 w-auto object-contain"
+                        alt="default logo"
+                    />
+                )}
 
                 <div className="flex flex-col justify-between py-2 w-full min-w-[300px]">
                     <div>

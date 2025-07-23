@@ -88,13 +88,19 @@ const BlogPage = () => {
                 setLoading(false);
 
             })
-            .catch((error) => {
+            .catch((err) => {
                 // console.log(blog);
 
                 // console.log(err.message);
                 // setLoading(false);
-                console.error("Error fetching blog:", error.message);
+                setBlog(null);
                 setLoading(false);
+                if (err.response) {
+                    const msg = err.response.data?.error;
+                    alert(`Error: ${msg}`);
+                } else {
+                    alert("Unexpected error occurred");
+                }
             })
     }
 
@@ -106,6 +112,7 @@ const BlogPage = () => {
         // setCommentsWrapper(false);
         setTotalParentCommentsLoaded(0);
     }
+
 
     useEffect(() => {
         resetStates();
@@ -119,14 +126,6 @@ const BlogPage = () => {
                         <CommentsContainer />
                         <div className="max-w-[900px] center py-10 max-lg:px-[5vw]">
 
-                            {/* {companyLogo && (
-                                <img
-                                    src={companyLogo}
-                                    onError={(e) => { e.target.src = "/default-banner.png"; }}
-                                    className="h-24 mx-auto object-contain"
-                                    alt={`${company} logo`}
-                                />
-                            )} */}
                             <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start mb-6">
                                 {companyLogo && (
                                     <img
@@ -161,13 +160,9 @@ const BlogPage = () => {
                                 <BlogInteraction />
                             )}
 
-                            {/* <BlogInteraction /> */}
-                            {/* <div className="my-12 font-gelasio blog-page-content">
-                                {experience}
 
-                            </div> */}
                             <BlogContent blog={blog} />
-                            {/* <BlogInteraction /> */}
+
 
                             {
                                 similarBlogs != null && similarBlogs.length ?

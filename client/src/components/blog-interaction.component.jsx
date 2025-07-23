@@ -20,7 +20,7 @@ const BlogInteraction = () => {
 
     let { userAuth: { username, access_token } } = useContext(UserContext);
     console.log(username);
-
+    console.log("Richardson Hall", _id)
     useEffect(() => {
         if (access_token) {
             axios.post(import.meta.env.VITE_SERVER_URL + "/isliked-by-user", { _id }, {
@@ -91,10 +91,16 @@ const BlogInteraction = () => {
 
                 </div>
                 <div className="flex gap-6 items-center">
-                    {
+                    {/* {
                         username === author_username ?
-                            <Link to={`/editor/${blog_id}`} className="underline hover:text-purple">Edit</Link> : ""
-                    }
+                            <Link to={`/editor/${_id}`} className="underline hover:text-purple">Edit</Link> : ""
+                    } */}
+                    {username === author_username && blog.draft ? (
+                        <Link to={`/editor/${blog_id}`} className="underline hover:text-purple">
+                            Edit
+                        </Link>
+                    ) : null}
+
 
                     <Link to={`https://twitter.com/intent/tweet?text=Read ${title}&url=${location.href}`}><i className="fi fi-brands-twitter text-xl hover:text-twitter" /></Link>
                     <Link

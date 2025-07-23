@@ -6,9 +6,13 @@ const BlogPostCard = ({ content, author }) => {
     const [companyLogo, setCompanyLogo] = useState(null);
     console.log("BlogPostCard content:", content);
 
-    let { publishedAt, title, banner, ctc, offerType, activity: { total_likes }, blog_id: id } = content;
+    let { publishedAt, title, company, ctc, offerType, activity: { total_likes }, blog_id: id } = content;
     let { fullname, profile_img, username } = author
-    const company = content.company || id?.split("-")[0];
+
+    // const fallbackCompany = id?.match(/^[A-Za-z]+/)?.[0];
+    // const company = content.company || fallbackCompany || "Unknown";
+
+    // const company = content.company || id?.split("-")[0];
     console.log(company);
     useEffect(() => {
         const fetchLogo = async () => {

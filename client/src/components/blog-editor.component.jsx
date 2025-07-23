@@ -19,13 +19,13 @@ const BlogEditor = () => {
     let { userAuth: { access_token } } = useContext(UserContext)
     let { blog_id } = useParams()
     let navigate = useNavigate()
-    const handleBannerUpload = (e) => {
-        console.log(e);
-        let img = e.target.files[0];
+    // const handleBannerUpload = (e) => {
+    //     console.log(e);
+    //     let img = e.target.files[0];
 
-        console.log(img);
+    //     console.log(img);
 
-    }
+    // }
     const handleTitleKeyDown = (e) => {
         console.log(e);
         if (e.keyCode == 13) {
@@ -190,8 +190,8 @@ const BlogEditor = () => {
                             type="text"
                             placeholder="Package (e.g., 12 LPA)"
                             className="w-full p-3 border rounded-md mt-5"
-                            value={blog.package || ''}
-                            onChange={(e) => setBlog({ ...blog, package: e.target.value })}
+                            value={blog.ctc || ''}
+                            onChange={(e) => setBlog({ ...blog, ctc: e.target.value })}
                         />
                         <input
                             type="number"
@@ -230,9 +230,9 @@ const BlogEditor = () => {
 
                         >
                             <option value="" className="">Offer Type</option>
-                            <option value="Easy">PPO</option>
-                            <option value="Medium">FTE</option>
-                            <option value="Hard">Internship</option>
+                            <option value="PPO">PPO</option>
+                            <option value="FTE">FTE</option>
+                            <option value="Internship">Internship</option>
                         </select>
                     </div>
                 </section>

@@ -1,12 +1,13 @@
 import { Toaster } from "react-hot-toast"
 import AnimationWrapper from "../common/page-animation"
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { EditorContext } from '../pages/editor.pages'
 import Tag from "./tags.component";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import { fetchCompanyLogo } from "../common/fetchCompanyLogo.js";
 const PublishForm = () => {
 
     let characterLimit = 250;
@@ -16,6 +17,20 @@ const PublishForm = () => {
     let { userAuth: { access_token } } = useContext(UserContext)
 
     let navigate = useNavigate()
+    const [companyLogo, setCompanyLogo] = useState(null);
+
+
+    //let { publishedAt, title, banner, ctc, offerType, activity: { total_likes }, blog_id: id } = content;
+    //let { fullname, profile_img, username } = author
+    //const company = content.company || id?.split("-")[0];
+    console.log(company);
+    useEffect(() => {
+        const fetchLogo = async () => {
+            const { logoUrl } = await fetchCompanyLogo(company);
+            setCompanyLogo(logoUrl);
+        };
+        if (company) fetchLogo();
+    }, [company]);
     const handleClose = () => {
         setEditorState("editor")
     }
@@ -102,14 +117,30 @@ const PublishForm = () => {
                     <i className="fi fi-br-cross"></i>
                 </button>
                 <div className="max-w-[550px] center">
-                    <p text-dark-grey mb-1> Preview </p>
+                    {/* <p text-dark-grey mb-1> Preview </p> */}
 
-                    <div className="w-full aspect-video rounded-1g overflow-hidden bg-grey mt-4">
+                    {/* <div className="w-full aspect-video rounded-1g overflow-hidden bg-grey mt-4">
                         <img src="" />
+                    </div> */}
+                    <div className="h-28 w-28 flex items-center justify-center bg-white shadow-sm rounded-lg overflow-hidden border">
+                        {companyLogo ? (
+                            <img
+                                src={companyLogo}
+                                onError={(e) => { e.target.src = "/default-banner.png"; }}
+                                className="max-h-20 max-w-[80%] object-contain"
+                                alt={`${company} logo`}
+                            />
+                        ) : (
+                            <img
+                                src="/default-banner.png"
+                                className="h-16 w-auto object-contain"
+                                alt="default logo"
+                            />
+                        )}
                     </div>
                     <h1 className="text-4xl font-medium mt-2 leading-tight line-clamp-2">{blog.title}</h1>
 
-                    <p className="font-gelasio line-clamp-2 text-xl leading-7 mt-4">{blog.company}</p>
+                    {/* <p className="font-gelasio line-clamp-2 text-xl leading-7 mt-4">{blog.company}</p> */}
                 </div>
                 <div className="border-grey lg:border-1 lg:pl-8">
                     <p className="text-dark-grey mb-2 mt-2"> The Title:  </p>

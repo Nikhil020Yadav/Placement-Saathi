@@ -1,14 +1,22 @@
-const LoadMoreBtn = ({ state, fetchDataFunc, additionalParam }) => {
-    if (state != null && state.totalDocs > state.results.length) {
+const LoadMoreBtn = ({ state, fetchDataFunc }) => {
+    // if (!state || state.results.length >= state.totalDocs) return null;
+    if (!state) return null;
+
+    if (state.results.length >= state.totalDocs) {
         return (
-            <button
-                onClick={() => fetchDataFunc({ ...additionalParam, page: state.page + 1 })}
-                className="text-dark-grey p-2 px-3 hover:bg-grey/50 rounded-md flex items-center gap-2"
-
-            > Load More </button>
-        )
+            <p className="text-center mt-4 text-gray-500">
+                🎉 You’ve reached the end of all blogs!
+            </p>
+        );
     }
-    //return null;
+    return (
+        <button
+            onClick={() => fetchDataFunc(state.page + 1)}
+            className="btn-load-more"
+        >
+            Load More
+        </button>
+    );
+};
 
-}
 export default LoadMoreBtn;

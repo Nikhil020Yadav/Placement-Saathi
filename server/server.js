@@ -251,15 +251,25 @@ server.post("/all-latest-blogs-count", (req, res) => {
 })
 
 server.post('/latest-blogs', (req, res) => {
-    let { page } = req.body
+    // let { page } = req.body
+    let page = Number(req.body?.page) || 1;
+    // console.log("📥 Received page:", page, typeof page);
+
     let maxLimit = 5;
+    // console.log("📥 Backend received page:", page);
+    // console.log("🧮 Calculated skip:", (page - 1) * maxLimit);
+    // Blog.countDocuments({ draft: false }).then(count => {
+    //     console.log("📊 Total published blogs:", count);
+    // });
+
     Blog.find({ draft: false })
         .populate("author", "personal_info.profile_img personal_info.fullname personal_info.username -_id")
         .sort({ "publishedAt": -1 })
-        .select("blog_id title ctc offerType banner activity publishedAt -_id ")
+        .select("blog_id company title ctc offerType banner activity publishedAt _id ")
         .skip((page - 1) * maxLimit)
         .limit(maxLimit)
         .then(blogs => {
+            // console.log("✅ Blogs returned:", blogs.map(b => b.blog_id));
             return res.status(200).json({ blogs })
         })
         .catch(err => {
@@ -283,12 +293,21 @@ server.get('/trending-blogs', (req, res) => {
 
 server.post("/search-blogs", (req, res) => {
     let { tag, query, author, page, limit, eliminate_blog } = req.body;
-    let findQuery;
+    console.log("Tag:", tag);
+    console.log("Query:", query);
+
+    // let findQuery;
+    let findQuery = { draft: false };
     if (tag) {
-        findQuery = { tags: tag, draft: false, blog_id: { $ne: eliminate_blog } };
+
+        findQuery = { tags: { $elemMatch: { $regex: new RegExp(`^${tag}$`, 'i') } }, draft: false, blog_id: { $ne: eliminate_blog } };
     }
     else if (query) {
-        findQuery = { draft: false, title: new RegExp(query, 'i')/*, experience: new RegExp(query, 'i')*/ };
+        const regex = new RegExp(query, 'i'); // case-insensitive regex
+        findQuery.$or = [
+            { title: regex },
+            { company: regex }
+        ];
     }
     else if (author) {
         findQuery = { draft: false, author }
@@ -297,7 +316,7 @@ server.post("/search-blogs", (req, res) => {
     Blog.find(findQuery)
         .populate("author", "personal_info.profile_img personal_info.fullname personal_info.username -_id")
         .sort({ "publishedAt": -1 })
-        .select("blog_id title ctc offerType activity tags publishedAt -_id ")
+        .select("blog_id title ctc company offerType activity tags publishedAt -_id ")
         .skip((page - 1) * maxLimit)
         .limit(maxLimit)
         .then(blogs => {
@@ -473,35 +492,39 @@ server.post('/createBlog', verifyJWT, (req, res) => {
 
 
 })
-
 server.post('/get-blog', (req, res) => {
-    let { blog_id, draft, mode } = req.body;
-    let incremental = mode != 'edit' ? 1 : 0;
-    // let query = blog_id.length === 24
-    //     ? { _id: blog_id }  // MongoDB _id
-    //     : { blog_id };      // Custom blog_id
+    let { blog_id, mode } = req.body;
+    let incremental = mode !== 'edit' ? 1 : 0;
 
-    Blog.findOneAndUpdate({ blog_id }, { $inc: { "activity.total_reads": incremental } })
+    Blog.findOneAndUpdate({ blog_id }, { $inc: { "activity.total_reads": incremental } }, { new: true })
         .populate("author", "personal_info.fullname personal_info.username personal_info.profile_img")
-        .select("title company jobRole department ctc year banner experience preparation difficulty offerType tags publishedAt activity")
+        .select("title company jobRole department ctc year banner experience preparation difficulty offerType tags publishedAt activity draft author")
         .then(blog => {
+            if (!blog) {
+                return res.status(404).json({ error: 'Blog not found' });
+            }
 
+            if (mode === 'edit' && !blog.draft) {
+                return res.status(403).json({ error: 'Cannot edit a published blog' });
+            }
+
+            // Safe to access blog.author now
             User.findOneAndUpdate({ "personal_info.username": blog.author.personal_info.username }, {
                 $inc: { "account_info.total_reads": incremental }
-            })
-                .catch((err) => {
-                    return res.status(500).json({ error: err.message })
-                })
+            }).catch((err) => {
+                console.error("User update error:", err.message);
+                // Don't return here, just log or notify if needed
+            });
 
-            if (blog.draft && !draft) {
-                return res.status(500).json({ error: 'You Cannot Access draft blog' })
-            }
             return res.status(200).json({ blog });
         })
         .catch((err) => {
-            return res.status(500).json({ error: err.message })
-        })
-})
+            console.error("Get blog error:", err.message);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        });
+});
+
+
 
 server.post("/like-blog", verifyJWT, (req, res) => {
     let user_id = req.user;
@@ -820,7 +843,7 @@ server.post("/user-written-blogs", verifyJWT, (req, res) => {
         .skip(skipDocs)
         .limit(maxLimit)
         .sort({ publishedAt: -1 })
-        .select("title banner publishedAt blog_id activity des draft -_id")
+        .select("title banner publishedAt blog_id activity company des draft -_id")
         .then((blogs) => {
             return res.status(200).json({ blogs })
         })

@@ -14,16 +14,21 @@ import LoadMoreBtn from "../components/load-more.component";
 const HomePage = () => {
 
 
-    let [blog, setBlog] = useState(null)
+    let [blog, setBlog] = useState({
+        results: [],
+        page: 1,
+        totalDocs: 0
+    })
     let [trendingBlogs, setTrendingBlogs] = useState(null)
     let [pageState, setPageState] = useState("home")
-    let categories = ["DSA", "Leetcode", "fte", "Development", "CS Fundamentals", "Competetive Programming", "Backend Development", "React", "Machine Learning", "Training Model"]
+    let categories = ["DSA", "Leetcode", "FTE", "Development", "CS Fundamentals", "Competitive Programming", "Backend Development", "React", "ML", "DevOps"]
 
     const fetchLatestBlogs = (page = 1) => {
+        console.log("🔼 Fetching page:", page);
         axios.post(import.meta.env.VITE_SERVER_URL + "/latest-blogs", { page })
             .then(async ({ data }) => {
-
-                console.log(data.blogs);
+                console.log("🧾 Received blogs:", data.blogs.map(blog => blog.blog_id));
+                // console.log(data.blogs);
                 let formatedData = await FilterPaginationData({
                     arr: blog,
                     data: data.blogs,
@@ -32,8 +37,11 @@ const HomePage = () => {
 
 
                 })
-                console.log(formatedData);
+                // console.log(formatedData);
                 console.log("Results:", formatedData?.results?.length);
+                // console.log("FormattedData:", formatedData);
+                console.log("🧱 Final merged data:", formatedData);
+
                 setBlog(formatedData)
 
             })
